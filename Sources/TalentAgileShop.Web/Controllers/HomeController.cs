@@ -27,42 +27,11 @@ namespace TalentAgileShop.Web.Controllers
         [Route("catalog")]
         public ActionResult Catalog([FromQuery]string view,[FromQuery]string category)
         {
-            // if (!_featureSet.CatalogCategories)
-            // {
-            //     category = null;
-            // }
-
-
-            // var query = _dataContext.Products.Include(p=> p.Image).Include(p => p.Category);
-            // if (category != null)
-            // {
-            //     query = query.Where(p => p.Category.Name == category);
-            // }
-            
-                
-                
-            // var products = query.Include(p => p.Origin).OrderBy(p => p.Name).ToList();
-            // var categories = _dataContext.Categories.OrderBy(c => c.Name).Select(c => c.Name).ToList();
-
-            // var viewModel = new CatalogViewModel(products, categories)
-            // {
-            //     ThumbnailViewAvailable = _featureSet.ThumbnailView,
-            //     ShowCategories = _featureSet.CatalogCategories,
-            //     CurrentCategory = category,
-            // };
-            // if (_featureSet.ThumbnailView && view == "thumbnail")
-            // {
-            //     viewModel.CurrentViewType = CatalogViewModel.ViewType.Thumbnail;
-            // }
-            // else
-            // {
-            //     viewModel.CurrentViewType = CatalogViewModel.ViewType.List;
-            // }
             var products = new List<Product> {
                 new Product { Id = "agile-pen", Name = "Agile Pen", Price = 9.90m },
                 new Product { Id = "agile-tshirt", Name = "Agile T-Shirt", Price = 19.90m },
             };
-            var categories = new List<string>();
+            var categories = new List<string> { "pens" };
 
             var viewModel = new CatalogViewModel(products, categories) {
                 ThumbnailViewAvailable = false,
@@ -71,7 +40,30 @@ namespace TalentAgileShop.Web.Controllers
             };
         
             return View(viewModel);
-            
+        }
+
+        [Route("products/{id}")]
+        public IActionResult Product(string id)
+        {
+            var product = new Product {
+                Id = "agile-pen",
+                Name = "Agile Pen",
+                Description = "A set of 10 agile pens",
+                Category = new Category { Id = "pens", Name = "Pens" },
+                Origin = new Country { Id = "fr", Name = "France" },
+                Size = ProductSize.Small,
+                Price = 9.9m
+            };
+
+            var viewModel = new ProductViewModel(product);
+
+            return View(viewModel);
+        }
+
+        [Route("products/{id}/image")]
+        public IActionResult ProductImage(string id)
+        {
+            return this.File("~/img/image.png", "image/png");
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

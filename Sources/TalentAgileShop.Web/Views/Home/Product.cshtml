@@ -1,0 +1,24 @@
+@model TalentAgileShop.Web.Models.ProductViewModel
+@{
+    ViewData["Title"] = Model.Product.Name;
+    //var apiUrl = Request.Url.GetLeftPart(UriPartial.Authority) + "/_api/cart";
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-7">
+            <img src="@Url.Action("ProductImage", new {id = Model.Product.Id})" class="img-fluid" alt="@Model.Product.Name" />
+            <h2>@Model.Product.Name</h2>
+            <div>@Model.Product.Description</div>
+        </div>
+        <div class="offset-md-2 col-md-3">
+
+            <h3>Price:  @Model.Product.Price € TTC</h3>
+            <h4>Item size : @Model.Product.Size</h4>
+            <h4>Category : @Model.Product.Category.Name</h4>
+            <h4>Origin : @Model.Product.Origin.Name</h4>
+            <a role="button" href="#" class="btn btn-primary" id="addToCartButton">Add to cart</a>
+        </div>
+    </div>
+</div>
+

@@ -65,7 +65,7 @@
 
 @if (Model.CurrentViewType == CatalogViewModel.ViewType.List)
 {
-    <partial name="CatalogList" />
+    @await Html.PartialAsync("CatalogList", Model.Products)
 
     if (Model.ThumbnailViewAvailable)
     {
@@ -81,7 +81,7 @@
 }
 else
 {
-    <partial name="CatalogThumbnail" />
+    @await Html.PartialAsync("CatalogThumbnail", Model.Products)
 
     <div class="container" style="margin-top: 50px">
         <div class="row">
