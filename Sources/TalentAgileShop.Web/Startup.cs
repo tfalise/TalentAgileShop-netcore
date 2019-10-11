@@ -24,6 +24,10 @@ namespace TalentAgileShop.Web
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
+            services.AddFeatureConfiguration(
+                options => options
+                            .UseEnvironmentVariables()
+                            .OverrideFeatures(featureSet => featureSet.CatalogCategoriesEnabled = true));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -13,10 +13,12 @@ namespace TalentAgileShop.Web.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly FeatureSet featureSet;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, FeatureSet featureSet)
         {
             _logger = logger;
+            this.featureSet = featureSet;
         }
 
         public IActionResult Index()
@@ -34,8 +36,8 @@ namespace TalentAgileShop.Web.Controllers
             var categories = new List<string> { "pens" };
 
             var viewModel = new CatalogViewModel(products, categories) {
-                ThumbnailViewAvailable = false,
-                ShowCategories = false,
+                ThumbnailViewAvailable = featureSet.ThumbnailViewEnabled,
+                ShowCategories = featureSet.CatalogCategoriesEnabled,
                 CurrentCategory = category
             };
         
