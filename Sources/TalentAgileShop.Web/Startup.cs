@@ -8,6 +8,8 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.EntityFrameworkCore;
+using TalentAgileShop.Data;
 
 namespace TalentAgileShop.Web
 {
@@ -28,6 +30,10 @@ namespace TalentAgileShop.Web
                 options => options
                             .UseEnvironmentVariables()
                             .OverrideFeatures(featureSet => featureSet.CatalogCategoriesEnabled = true));
+
+            services.AddDbContext<TalentAgileShopDataContext>(
+                options => options.UseSqlServer(Configuration.GetConnectionString("ShopDataContext"))
+            );
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
