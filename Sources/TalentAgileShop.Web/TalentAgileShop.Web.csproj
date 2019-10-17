@@ -8,6 +8,7 @@
   <ItemGroup>
     <ProjectReference Include="..\TalentAgileShop.Model\TalentAgileShop.Model.csproj" />
     <ProjectReference Include="..\TalentAgileShop.Cart\TalentAgileShop.Cart.csproj" />
+    <ProjectReference Include="..\TalentAgileShop.Data\TalentAgileShop.Data.csproj" />
   </ItemGroup>
 
 
