@@ -8,6 +8,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.DependencyInjection;
 using TalentAgileShop.Data;
+using TalentAgileShop.Web.Data;
 
 namespace TalentAgileShop.Web
 {
@@ -31,7 +32,7 @@ namespace TalentAgileShop.Web
                 try
                 {
                     var context = services.GetRequiredService<TalentAgileShopDataContext>();
-                    context.Database.EnsureCreated();
+                    DbInitializer.Initialize(context);
                 }
                 catch (Exception ex)
                 {

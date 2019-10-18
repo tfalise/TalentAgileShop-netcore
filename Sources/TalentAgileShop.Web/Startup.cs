@@ -28,8 +28,7 @@ namespace TalentAgileShop.Web
             services.AddControllersWithViews();
             services.AddFeatureConfiguration(
                 options => options
-                            .UseEnvironmentVariables()
-                            .OverrideFeatures(featureSet => featureSet.CatalogCategoriesEnabled = true));
+                            .UseEnvironmentVariables();
 
             services.AddDbContext<TalentAgileShopDataContext>(
                 options => options.UseSqlServer(Configuration.GetConnectionString("ShopDataContext"))

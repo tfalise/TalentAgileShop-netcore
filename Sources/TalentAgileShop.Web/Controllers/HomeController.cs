@@ -5,6 +5,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Microsoft.EntityFrameworkCore;
+using TalentAgileShop.Data;
 using TalentAgileShop.Model;
 using TalentAgileShop.Web.Models;
 
@@ -12,12 +14,14 @@ namespace TalentAgileShop.Web.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly ILogger<HomeController> logger;
+        private readonly TalentAgileShopDataContext dataContext;
         private readonly FeatureSet featureSet;
 
-        public HomeController(ILogger<HomeController> logger, FeatureSet featureSet)
+        public HomeController(ILogger<HomeController> logger, FeatureSet featureSet, TalentAgileShopDataContext dataContext)
         {
-            _logger = logger;
+            this.logger = logger;
+            this.dataContext = dataContext;
             this.featureSet = featureSet;
         }
 
@@ -29,11 +33,13 @@ namespace TalentAgileShop.Web.Controllers
         [Route("catalog")]
         public ActionResult Catalog([FromQuery]string view,[FromQuery]string category)
         {
-            var products = new List<Product> {
-                new Product { Id = "agile-pen", Name = "Agile Pen", Price = 9.90m },
-                new Product { Id = "agile-tshirt", Name = "Agile T-Shirt", Price = 19.90m },
-            };
-            var categories = new List<string> { "pens" };
+            var query = this.dataContext.Products.Include(p => p.Category).Include(p => p.Image).AsQueryable();
+            if(category != null)
+            {
+                query = query.Where(p => p.Category.Name == category);
+            }
+            var products = query.Include(p => p.Origin).OrderBy(p => p.Name).ToList();
+            var categories = this.dataContext.Categories.OrderBy(c => c.Name).Select(c => c.Name).ToList();
 
             var viewModel = new CatalogViewModel(products, categories) {
                 ThumbnailViewAvailable = featureSet.ThumbnailViewEnabled,
@@ -47,25 +53,30 @@ namespace TalentAgileShop.Web.Controllers
         [Route("products/{id}")]
         public IActionResult Product(string id)
         {
-            var product = new Product {
-                Id = "agile-pen",
-                Name = "Agile Pen",
-                Description = "A set of 10 agile pens",
-                Category = new Category { Id = "pens", Name = "Pens" },
-                Origin = new Country { Id = "fr", Name = "France" },
-                Size = ProductSize.Small,
-                Price = 9.9m
-            };
+            var product =
+               this.dataContext.Products.Include(p => p.Category).Include(p => p.Origin).FirstOrDefault(p => p.Id == id);
+
+            if (product == null)
+            {                
+                return NotFound();
+            }
 
             var viewModel = new ProductViewModel(product);
-
             return View(viewModel);
         }
 
         [Route("products/{id}/image")]
         public IActionResult ProductImage(string id)
         {
-            return this.File("~/img/image.png", "image/png");
+            var product =
+                this.dataContext.Products.Include(p => p.Image).FirstOrDefault(p => p.Id == id);
+
+            if (product == null)
+            {
+                return NotFound();
+            }
+
+            return this.File(product.Image.Data, "image/png");
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
