@@ -28,7 +28,7 @@ namespace TalentAgileShop.Web
             services.AddControllersWithViews();
             services.AddFeatureConfiguration(
                 options => options
-                            .UseEnvironmentVariables();
+                            .UseEnvironmentVariables());
 
             services.AddDbContext<TalentAgileShopDataContext>(
                 options => options.UseSqlServer(Configuration.GetConnectionString("ShopDataContext"))

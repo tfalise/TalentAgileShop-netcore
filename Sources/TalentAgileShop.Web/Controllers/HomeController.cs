@@ -38,6 +38,7 @@ namespace TalentAgileShop.Web.Controllers
             {
                 query = query.Where(p => p.Category.Name == category);
             }
+
             var products = query.Include(p => p.Origin).OrderBy(p => p.Name).ToList();
             var categories = this.dataContext.Categories.OrderBy(c => c.Name).Select(c => c.Name).ToList();
 
@@ -46,6 +47,15 @@ namespace TalentAgileShop.Web.Controllers
                 ShowCategories = featureSet.CatalogCategoriesEnabled,
                 CurrentCategory = category
             };
+
+            if (this.featureSet.ThumbnailViewEnabled && view == "thumbnail")
+            {
+                viewModel.CurrentViewType = CatalogViewModel.ViewType.Thumbnail;
+            }
+            else
+            {
+                viewModel.CurrentViewType = CatalogViewModel.ViewType.List;
+            }
         
             return View(viewModel);
         }
