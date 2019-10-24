@@ -274,6 +274,7 @@ __pycache__/
 
 # Static libs
 **/wwwroot/lib
+**/wwwroot/scripts
 
 ### DotnetCore ###
 # .NET Core build folders
